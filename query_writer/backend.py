@@ -80,7 +80,7 @@ class QueryWriter:
 
         agent = create_react_agent(
             prompt=prompt,
-            llm=ChatOpenAI(temperature=0, model='gpt-4o-mini'),
+            llm=self.llm,
             tools=tools
         )
 
@@ -101,7 +101,7 @@ class QueryWriter:
         '''
         Helper fx to parse the response to get the query.
         '''
-        return response['output'].replace('```', '')
+        return response['output'].replace('```', '').lstrip('sql')
 
 
     def run_query(self, query: str) -> str:

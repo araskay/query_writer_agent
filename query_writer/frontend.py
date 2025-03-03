@@ -34,7 +34,7 @@ if prompt := st.chat_input("How can I help?"):
         with st.spinner("Thinking..."):
             response = query_writer.generate_query(prompt)
             st.markdown('To answer this question, I will run the following SQL query:')
-            st.markdown("```{}```".format(query_writer.response_parser(response)))
+            st.markdown("`{}`".format(query_writer.response_parser(response)))
             st.session_state.messages.append(
                 {
                     "role": "assistant",
@@ -44,7 +44,7 @@ if prompt := st.chat_input("How can I help?"):
             st.session_state.messages.append(
                 {
                     "role": "assistant",
-                    "content": "```{}```".format(query_writer.response_parser(response))
+                    "content": "`{}`".format(query_writer.response_parser(response))
                 }
             )
             st.button('Looks good, run it!', on_click=click_button)
@@ -54,7 +54,7 @@ if st.session_state.clicked:
     with st.chat_message("assistant"):
         response = st.session_state.messages[-1]["content"]
         st.markdown('Here are the results:')
-        results = query_writer.run_query(response.replace('```', ''))
+        results = query_writer.run_query(response.replace('`', ''))
         st.markdown(results)          
         st.session_state.messages.append({"role": "assistant", "content": "Here are the results:"})
         st.session_state.messages.append({"role": "assistant", "content": results})
