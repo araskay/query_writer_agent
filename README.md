@@ -8,7 +8,9 @@ This repository contains an implementation of a ReAct agent to create and run qu
 - The agent is aware of the db when generating the query and should be able to identify the right table(s), etc. to use in the query for the task
 
 ## The ReAct Concept
+
 ![alt text](image.png)
+
 The agent follows a ReAct (Reason/Action) design concept, using [LangChain's ReAct prompt template](https://smith.langchain.com/hub/langchain-ai/react-agent-template), where the LLM is prompted to use the following reason / action format:
 ```
 Thought: Do I need to use a tool? Yes
@@ -18,6 +20,7 @@ Observation: the result of the action
 ```
 
 Here is an example using the [Bike Store database](https://www.kaggle.com/datasets/dillonmyrick/bike-store-sample-database):
+
 ![alt text](image-1.png)
 
 ## How to use the code
