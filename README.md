@@ -9,7 +9,7 @@ This repository contains an implementation of a ReAct agent to create and run qu
 
 ## The ReAct Concept
 
-![alt text](image.png)
+<img src="image.png" alt="drawing" width="250"/>
 
 The agent follows a ReAct (Reason/Action) design concept, using [LangChain's ReAct prompt template](https://smith.langchain.com/hub/langchain-ai/react-agent-template), where the LLM is prompted to use the following reason / action format:
 ```
