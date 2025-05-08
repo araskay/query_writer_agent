@@ -5,6 +5,7 @@ from langchain_openai import ChatOpenAI
 from langchain.agents import create_react_agent, AgentExecutor
 from langchain_community.utilities import SQLDatabase
 from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
+from query_writer.db_connector.databricks_connector import DatabricksConnector
 
 load_dotenv()
 
@@ -33,37 +34,7 @@ class QueryWriter:
             ```<query>```
         '''
         self.llm = ChatOpenAI(temperature=0, model='gpt-4o-mini')
-        self.db = self.db_databircks_sql_warehouse()
-
-    @staticmethod
-    def db_databricks_catalog() -> SQLDatabase:
-        '''
-        use this fx to connect to a db in databricks catalog
-        '''
-        db = SQLDatabase.from_databricks(
-            catalog=os.environ['DATABRICKS_CATALOG'],
-            schema=os.environ['DATABRICKS_SCHEMA'],
-            host=os.environ['DATABRICKS_HOST'],
-            api_token=os.environ['DATABRICKS_API_TOKEN'],
-            warehouse_id=os.environ['DATABRICKS_WAREHOUSE_ID'],
-            cluster_id=os.environ['DATABRICKS_CLUSTER_ID']
-        )
-        return db
-
-    @staticmethod
-    def db_databircks_sql_warehouse() -> SQLDatabase:
-        '''
-        use this fx to connect to a db in databricks sql warehouse
-        '''
-        db = SQLDatabase.from_databricks(
-            catalog=os.environ['DATABRICKS_CATALOG'],
-            schema=os.environ['DATABRICKS_SCHEMA'],
-            host=os.environ['DATABRICKS_HOST'],
-            api_token=os.environ['DATABRICKS_API_TOKEN'],
-            warehouse_id=os.environ['DATABRICKS_WAREHOUSE_ID']
-        )
-        return db
-    
+        self.db = SQLDatabase(DatabricksConnector().get_engine()) 
 
     def generate_query(self, question: str) -> dict:
         '''
@@ -110,15 +81,4 @@ class QueryWriter:
         '''
         return self.db.run(query)
 
-if __name__ == '__main__':
-    query = """
-        What is the average age?
-    """
-    query_writer = QueryWriter()
-    response = query_writer.generate_query(query)
-    print('------- response -------')
-    print(response)
-    print('------- results -------')
-    query_to_run = query_writer.response_parser(response)
-    print(query_writer.run_query(query_to_run))
 

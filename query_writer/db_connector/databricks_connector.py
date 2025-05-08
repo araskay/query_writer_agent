@@ -1,0 +1,49 @@
+import os
+from dotenv import load_dotenv
+from sqlalchemy import create_engine, text
+
+# Load environment variables from .env file
+load_dotenv()
+
+class DatabricksConnector:
+    """
+    A connector class for establishing connections to Databricks
+    
+    This class handles authentication and connection management for Databricks
+    using environment variables for configuration.
+    """
+    
+    def __init__(self):
+        """
+        Initialize the Databricks connector with configuration from environment variables.
+        """
+        self.host = os.getenv("DATABRICKS_SERVER_HOSTNAME")
+        self.http_path = os.getenv("DATABRICKS_HTTP_PATH")
+        self.access_token = os.getenv("DATABRICKS_TOKEN")
+        self.catalog = os.getenv("DATABRICKS_CATALOG")
+        self.schema = os.getenv("DATABRICKS_SCHEMA")
+
+    def get_engine(self):
+        """
+        Create and return a SQLAlchemy engine for Databricks connections.
+        
+        Returns:
+            sqlalchemy.engine.Engine: A configured SQLAlchemy engine for Databricks.
+        """
+        return create_engine(
+            f"databricks://token:{self.access_token}@{self.host}?http_path={self.http_path}&catalog={self.catalog}&schema={self.schema}"
+        )
+
+    def run_query(self, query):
+        """
+        Execute a SQL query against Databricks.
+        
+        Args:
+            query (str): The SQL query to execute.
+            
+        Returns:
+            sqlalchemy.engine.CursorResult: The result of the executed query.
+        """
+        with self.get_engine().connect() as connection:
+            result = connection.execute(text(query))
+            return result
