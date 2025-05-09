@@ -80,4 +80,18 @@ class QueryWriter:
         '''
         return self.db.run(query)
 
+if __name__ == "__main__":
+    from sample_db.bike_store import BikeStoreDb
+    db = BikeStoreDb()
+    engine = db.get_engine()
+    query_writer = QueryWriter(engine)
+    
+    # Example usage
+    question = "What are the top 5 most expensive bikes?"
+    response = query_writer.generate_query(question)
+    print("Generated SQL Query:", query_writer.response_parser(response))
+    
+    # Run the query
+    results = query_writer.run_query(query_writer.response_parser(response).replace('```', ''))
+    print("Query Results:", results)
 

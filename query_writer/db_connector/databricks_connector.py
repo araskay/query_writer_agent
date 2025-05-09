@@ -11,6 +11,19 @@ class DatabricksConnector:
     
     This class handles authentication and connection management for Databricks
     using environment variables for configuration.
+
+    Environment Variables:
+        - DATABRICKS_SERVER_HOSTNAME: The hostname of the Databricks server.
+        - DATABRICKS_HTTP_PATH: The HTTP path for the Databricks connection.
+        - DATABRICKS_TOKEN: The access token for authentication.
+        - DATABRICKS_CATALOG: The catalog to use in the connection.
+        - DATABRICKS_SCHEMA: The schema to use in the connection.
+    Example:
+        >>> connector = DatabricksConnector()
+        >>> engine = connector.get_engine()
+        >>> result = connector.run_query("SELECT * FROM my_table LIMIT 5")
+        >>> for row in result:
+        >>>     print(row)
     """
     
     def __init__(self):

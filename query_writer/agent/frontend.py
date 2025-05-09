@@ -1,9 +1,19 @@
 import streamlit as st
 from backend import QueryWriter
 from streamlit_chat import message
-from query_writer.db_connector.databricks_connector import DatabricksConnector
+from sample_db.bike_store import BikeStoreDb
 
-query_writer = QueryWriter(DatabricksConnector().get_engine())
+@st.cache_resource
+def get_query_writer():
+    '''
+    Helper function to instantiate QueryWriter with duckdb.
+    Used to cache the query writer.
+    This is a workaround to avoid re-initializing the query writer on every rerun,
+    which is causes a duckdb error, since duckdb enforces a single connection.
+    '''
+    return QueryWriter(BikeStoreDb().get_engine())
+
+query_writer = get_query_writer()
 
 st.title("Query Writer")
 
