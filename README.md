@@ -42,6 +42,8 @@ Alternatively, the engine can be used with any other data set. All you need to d
 I have implemented a db_connector for querying databases in databricks delta lake. See `query_writer.db_connector.databricks_connector`.
 
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/araskay/query_writer_agent)
+
 
 
 
