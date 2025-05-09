@@ -1,19 +1,18 @@
 from dotenv import load_dotenv
-import os
 from langchain import hub
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_react_agent, AgentExecutor
 from langchain_community.utilities import SQLDatabase
 from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
-from query_writer.db_connector.databricks_connector import DatabricksConnector
+from sqlalchemy import Engine
 
 load_dotenv()
 
 class QueryWriter:
-    def __init__(self):
+    def __init__(self, engine: Engine):
         self.instructions = '''
             You are an agent designed to interact with a SQL database.
-            Given an input question, create a syntactically correct databricks query to answer the question.
+            Given an input question, create a syntactically correct sql query to answer the question.
             Unless the user specifies a specific number of examples they wish to obtain, always limit your query to at most 5 results.
             You can order the results by a relevant column to return the most interesting examples in the database.
             Never query for all the columns from a specific table, only ask for the relevant columns given the question.
@@ -34,7 +33,7 @@ class QueryWriter:
             ```<query>```
         '''
         self.llm = ChatOpenAI(temperature=0, model='gpt-4o-mini')
-        self.db = SQLDatabase(DatabricksConnector().get_engine()) 
+        self.db = SQLDatabase(engine=engine) 
 
     def generate_query(self, question: str) -> dict:
         '''

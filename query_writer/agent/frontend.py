@@ -1,8 +1,9 @@
 import streamlit as st
 from backend import QueryWriter
 from streamlit_chat import message
+from query_writer.db_connector.databricks_connector import DatabricksConnector
 
-query_writer = QueryWriter()
+query_writer = QueryWriter(DatabricksConnector().get_engine())
 
 st.title("Query Writer")
 
